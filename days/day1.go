@@ -22,6 +22,36 @@ func (day *Day1) ReadInput(dayIndex int8) []string {
 	return tools.ReadInput(fmt.Sprintf("./inputs/input%d", dayIndex))
 }
 
+func (day *Day1) Run() {
+	data := day.ReadInput(1)
+	result, err := day.Part1(data)
+	if err != nil {
+		panic("Day 1 Part 1 failed")
+	}
+	println(result)
+
+	result, err = day.Part2(data)
+	if err != nil {
+		panic("Day 1 Part 2 failed")
+	}
+	println(result)
+}
+
+func (day *Day1) RunSample() {
+	data := day.ReadSample(1)
+	result, err := day.Part1(data)
+	if err != nil {
+		panic("Day 1 Part 1 Sample failed")
+	}
+	println(result)
+
+	result, err = day.Part2(data)
+	if err != nil {
+		panic("Day 1 Part 2 Sample failed")
+	}
+	println(result)
+}
+
 func (day *Day1) Part1(input []string) (result string, err error) {
 	firstList := make([]int, 0)
 	secondList := make([]int, 0)
@@ -56,7 +86,7 @@ func (day *Day1) Part1(input []string) (result string, err error) {
 		distance += math.Abs(float64(firstList[i] - secondList[i]))
 	}
 
-	return fmt.Sprintf("Day 1 Part 1: %f", distance), nil
+	return fmt.Sprintf("Day 1 Part 1: %d", int(distance)), nil
 }
 
 func (day *Day1) Part2(input []string) (result string, err error) {
