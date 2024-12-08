@@ -9,12 +9,6 @@ type Day6 struct {
 	Day
 }
 
-type Position struct {
-	x, y int
-}
-
-func NewPosition(x, y int) Position { return Position{x, y} }
-
 type Direction int
 
 const (
@@ -25,20 +19,20 @@ const (
 )
 
 type GuardMap struct {
-	start     Position
-	path      map[Position]bool
-	pathList  []Position
-	obstacles map[Position]bool
+	start     tools.Position
+	path      map[tools.Position]bool
+	pathList  []tools.Position
+	obstacles map[tools.Position]bool
 	width     int
 	height    int
 }
 
 func EmptyGuardMap() GuardMap {
 	return GuardMap{
-		start:     NewPosition(0, 0),
-		path:      make(map[Position]bool),
-		pathList:  make([]Position, 0),
-		obstacles: make(map[Position]bool),
+		start:     tools.NewPosition(0, 0),
+		path:      make(map[tools.Position]bool),
+		pathList:  make([]tools.Position, 0),
+		obstacles: make(map[tools.Position]bool),
 		width:     0,
 		height:    0,
 	}
@@ -103,7 +97,7 @@ func runGuard(guardMap GuardMap) GuardMap {
 	direction := Up
 
 	for {
-		if position.x < 0 || position.x >= guardMap.width || position.y < 0 || position.y >= guardMap.height {
+		if position.X < 0 || position.X >= guardMap.width || position.Y < 0 || position.Y >= guardMap.height {
 			break
 		}
 
@@ -112,24 +106,24 @@ func runGuard(guardMap GuardMap) GuardMap {
 		}
 		guardMap.path[position] = true
 
-		if direction == Up && guardMap.obstacles[NewPosition(position.x, position.y-1)] {
+		if direction == Up && guardMap.obstacles[tools.NewPosition(position.X, position.Y-1)] {
 			direction = Right
-		} else if direction == Right && guardMap.obstacles[NewPosition(position.x+1, position.y)] {
+		} else if direction == Right && guardMap.obstacles[tools.NewPosition(position.X+1, position.Y)] {
 			direction = Down
-		} else if direction == Down && guardMap.obstacles[NewPosition(position.x, position.y+1)] {
+		} else if direction == Down && guardMap.obstacles[tools.NewPosition(position.X, position.Y+1)] {
 			direction = Left
-		} else if direction == Left && guardMap.obstacles[NewPosition(position.x-1, position.y)] {
+		} else if direction == Left && guardMap.obstacles[tools.NewPosition(position.X-1, position.Y)] {
 			direction = Up
 		}
 
 		if direction == Up {
-			position.y -= 1
+			position.Y -= 1
 		} else if direction == Right {
-			position.x += 1
+			position.X += 1
 		} else if direction == Down {
-			position.y += 1
+			position.Y += 1
 		} else {
-			position.x -= 1
+			position.X -= 1
 		}
 	}
 
@@ -137,13 +131,13 @@ func runGuard(guardMap GuardMap) GuardMap {
 }
 
 func runGuard2(guardMap GuardMap) int {
-	options := make(map[Position]bool)
+	options := make(map[tools.Position]bool)
 
 	for _, p := range guardMap.pathList {
-		position := NewPosition(guardMap.start.x, guardMap.start.y)
+		position := tools.NewPosition(guardMap.start.X, guardMap.start.Y)
 		direction := Up
-		path := make(map[Position]int)
-		obstacles := make(map[Position]bool)
+		path := make(map[tools.Position]int)
+		obstacles := make(map[tools.Position]bool)
 		for k, v := range guardMap.obstacles {
 			obstacles[k] = v
 		}
@@ -156,7 +150,7 @@ func runGuard2(guardMap GuardMap) int {
 			}
 
 			// guard moved out of bounds
-			if position.x < 0 || position.x >= guardMap.width || position.y < 0 || position.y >= guardMap.height {
+			if position.X < 0 || position.X >= guardMap.width || position.Y < 0 || position.Y >= guardMap.height {
 				break
 			}
 
@@ -166,24 +160,24 @@ func runGuard2(guardMap GuardMap) int {
 				options[p] = true
 			}
 
-			if direction == Up && obstacles[NewPosition(position.x, position.y-1)] {
+			if direction == Up && obstacles[tools.NewPosition(position.X, position.Y-1)] {
 				direction = Right
-			} else if direction == Right && obstacles[NewPosition(position.x+1, position.y)] {
+			} else if direction == Right && obstacles[tools.NewPosition(position.X+1, position.Y)] {
 				direction = Down
-			} else if direction == Down && obstacles[NewPosition(position.x, position.y+1)] {
+			} else if direction == Down && obstacles[tools.NewPosition(position.X, position.Y+1)] {
 				direction = Left
-			} else if direction == Left && obstacles[NewPosition(position.x-1, position.y)] {
+			} else if direction == Left && obstacles[tools.NewPosition(position.X-1, position.Y)] {
 				direction = Up
 			}
 
 			if direction == Up {
-				position.y -= 1
+				position.Y -= 1
 			} else if direction == Right {
-				position.x += 1
+				position.X += 1
 			} else if direction == Down {
-				position.y += 1
+				position.Y += 1
 			} else {
-				position.x -= 1
+				position.X -= 1
 			}
 		}
 	}
@@ -198,9 +192,9 @@ func createGuardMap(input []string) GuardMap {
 	for y, row := range input {
 		for x, cell := range row {
 			if cell == '#' {
-				guardMap.obstacles[NewPosition(x, y)] = true
+				guardMap.obstacles[tools.NewPosition(x, y)] = true
 			} else if cell == '^' {
-				guardMap.start = NewPosition(x, y)
+				guardMap.start = tools.NewPosition(x, y)
 			}
 		}
 	}
@@ -210,10 +204,10 @@ func createGuardMap(input []string) GuardMap {
 func printGuardMap(guardMap GuardMap) {
 	for y := 0; y < guardMap.height; y++ {
 		for x := 0; x < guardMap.width; x++ {
-			value := guardMap.obstacles[NewPosition(x, y)]
+			value := guardMap.obstacles[tools.NewPosition(x, y)]
 			if value {
 				fmt.Print("#")
-			} else if guardMap.start.x == x && guardMap.start.y == y {
+			} else if guardMap.start.X == x && guardMap.start.Y == y {
 				fmt.Print("^")
 			} else {
 				fmt.Print(".")
