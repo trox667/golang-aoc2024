@@ -23,9 +23,9 @@ func main() {
     //	day6 := days.Day6{}
     //	day6.Run()
 	//
-	//	day7 := days.Day7{}
-	//	day7.Run()
+	day7 := days.Day7{}
+	day7.Run()
 
-	day8 := days.Day8{}
-	day8.Run()
+	//  day8 := days.Day8{}
+	//  day8.Run()
 }
